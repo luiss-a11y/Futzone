@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futzone — jogos diários de futebol</title>
+<meta name="description" content="Futzone: oito jogos rápidos de futebol pra jogar todo dia. Adivinhe o craque, monte carreiras, ache o impostor, desembaralhe nomes, corra contra o tempo e mais.">
+<meta property="og:title" content="Futzone — jogos diários de futebol">
+<meta property="og:description" content="Oito jogos rápidos de futebol, de graça: adivinhe, agrupe, deduza, monte carreiras, teste a memória, desembaralhe nomes e corra contra o tempo.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grass:#0a2a1a;        /* deep pitch green */
+    --grass-2:#0e3823;      /* lighter stripe */
+    --panel:#070d0a;        /* electronic board black-green */
+    --amber:#ffcf3f;        /* added-time board amber */
+    --amber-deep:#f5a623;
+    --chalk:#f3f7f4;        /* line marking white */
+    --mute:#8aa498;         /* muted green-grey */
+    --line:#1c4a32;         /* faint pitch line */
+    --net:rgba(255,255,255,.04);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--grass);
+    color:var(--chalk);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+  /* pitch stripes */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(180deg,var(--grass) 0,var(--grass) 64px,var(--grass-2) 64px,var(--grass-2) 128px);
+    opacity:.55;
+  }
+  /* center circle + halfway line, faint */
+  body::after{
+    content:"";position:fixed;z-index:0;pointer-events:none;
+    left:50%;top:-180px;transform:translateX(-50%);
+    width:360px;height:360px;border:2px solid var(--line);border-radius:50%;
+    box-shadow:0 0 0 9999px transparent;opacity:.5;
+  }
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px;}
+
+  /* ── top bar ── */
+  header{display:flex;align-items:center;justify-content:space-between;padding:26px 0 0;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .dot{width:11px;height:11px;background:var(--amber);border-radius:50%;box-shadow:0 0 14px var(--amber);}
+  .brand .name{font-family:'Space Mono',monospace;font-weight:700;letter-spacing:3px;font-size:14px;color:var(--chalk);text-transform:uppercase;}
+  .tag-mini{font-family:'Space Mono',monospace;font-size:11px;color:var(--mute);letter-spacing:1px;}
+
+  /* ── hero: the added-time board ── */
+  .hero{text-align:center;padding:64px 0 30px;}
+  .board{
+    display:inline-flex;align-items:center;gap:18px;
+    background:var(--panel);
+    border:1px solid #14241b;
+    border-radius:14px;
+    padding:18px 26px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,207,63,.06);
+    margin-bottom:34px;
+  }
+  .board .plus{font-family:'Anton',sans-serif;font-size:46px;color:var(--amber);line-height:1;text-shadow:0 0 22px rgba(255,207,63,.5);}
+  .board .label{text-align:left;}
+  .board .label .l1{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--mute);text-transform:uppercase;}
+  .board .label .l2{font-family:'Anton',sans-serif;font-size:24px;letter-spacing:1px;color:var(--amber);line-height:1.1;}
+
+  h1{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(56px,13vw,140px);
+    line-height:.92;
+    letter-spacing:-1px;
+    text-transform:uppercase;
+    color:var(--chalk);
+  }
+  h1 .zone{color:var(--amber);text-shadow:0 0 30px rgba(255,207,63,.35);}
+  .lede{
+    max-width:560px;margin:24px auto 0;
+    font-size:clamp(17px,2.4vw,21px);line-height:1.55;color:var(--chalk);
+    font-weight:500;
+  }
+  .lede .hl{color:var(--amber);font-weight:700;}
+  .sub{margin-top:12px;font-family:'Space Mono',monospace;font-size:13px;color:var(--mute);letter-spacing:.5px;}
+
+  /* ── games ── */
+  .games{
+    display:grid;grid-template-columns:1fr 1fr;gap:22px;
+    padding:46px 0 20px;
+  }
+  @media(max-width:720px){.games{grid-template-columns:1fr;}}
+  .game{
+    position:relative;display:block;text-decoration:none;color:inherit;
+    border-radius:16px;overflow:hidden;
+    border:1px solid #173024;
+    background:var(--panel);
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    min-height:230px;
+  }
+  .game:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 16px 40px rgba(0,0,0,.5);}
+  .game:focus-visible{outline:3px solid var(--amber);outline-offset:3px;}
+  .game .inner{position:relative;z-index:2;padding:28px;display:flex;flex-direction:column;height:100%;}
+  .game .kicker{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mute);margin-bottom:auto;}
+  .game .gname{font-family:'Anton',sans-serif;font-size:38px;letter-spacing:.5px;text-transform:uppercase;margin:14px 0 8px;}
+  .game .gdesc{font-size:14px;line-height:1.5;color:var(--mute);max-width:34ch;}
+  .game .play{
+    margin-top:20px;display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:13px;letter-spacing:1px;
+    color:var(--panel);background:var(--amber);
+    padding:9px 16px;border-radius:7px;width:fit-content;
+    transition:gap .18s ease;
+  }
+  .game:hover .play{gap:14px;}
+  /* per-game accent watermark */
+  .game .mark{position:absolute;z-index:1;right:-14px;bottom:-26px;font-family:'Anton',sans-serif;font-size:150px;line-height:1;opacity:.06;color:var(--chalk);pointer-events:none;}
+  .game.word .gname{color:#7be2a0;}
+  .game.word:hover{border-color:#7be2a0;}
+  .game.word:hover .play{background:#7be2a0;}
+  .game.word:focus-visible{outline-color:#7be2a0;}
+  .game.craque .gname{color:var(--amber);}
+  .game.liga .gname{color:#6fa3ff;}
+  .game.liga:hover{border-color:#6fa3ff;}
+  .game.liga:hover .play{background:#6fa3ff;}
+  .game.liga:focus-visible{outline-color:#6fa3ff;}
+  .game.impostor .gname{color:#ff5252;}
+  .game.impostor:hover{border-color:#ff5252;}
+  .game.impostor:hover .play{background:#ff5252;}
+  .game.impostor:focus-visible{outline-color:#ff5252;}
+  .game.carreira .gname{color:#4db8ff;}
+  .game.carreira:hover{border-color:#4db8ff;}
+  .game.carreira:hover .play{background:#4db8ff;}
+  .game.carreira:focus-visible{outline-color:#4db8ff;}
+  .game.caca .gname{color:#2ed47a;}
+  .game.caca:hover{border-color:#2ed47a;}
+  .game.caca:hover .play{background:#2ed47a;}
+  .game.caca:focus-visible{outline-color:#2ed47a;}
+  .game.anagrama .gname{color:#a98bff;}
+  .game.anagrama:hover{border-color:#a98bff;}
+  .game.anagrama:hover .play{background:#a98bff;}
+  .game.anagrama:focus-visible{outline-color:#a98bff;}
+  .game.sobrevivencia .gname{color:#ff6a2b;}
+  .game.sobrevivencia:hover{border-color:#ff6a2b;}
+  .game.sobrevivencia:hover .play{background:#ff6a2b;}
+  .game.sobrevivencia:focus-visible{outline-color:#ff6a2b;}
+
+  /* ── footer strip ── */
+  .strip{
+    margin:30px 0 0;padding:20px 0;border-top:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  }
+  .strip .more{font-family:'Space Mono',monospace;font-size:12px;color:var(--mute);letter-spacing:.5px;}
+  .strip .more b{color:var(--chalk);}
+  footer{padding:26px 0 40px;text-align:center;}
+  footer .ft{font-family:'Space Mono',monospace;font-size:12px;color:var(--mute);letter-spacing:1px;}
+  footer .ft .amber{color:var(--amber-deep);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important;animation:none!important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <span class="dot"></span>
+        <span class="name">Futzone</span>
+      </div>
+      <span class="tag-mini">jogos diários da bola</span>
+    </header>
+
+    <section class="hero">
+      <div class="board" aria-hidden="true">
+        <span class="plus">+</span>
+        <span class="label">
+          <span class="l1">tempo de</span>
+          <span class="l2">JOGO</span>
+        </span>
+      </div>
+      <h1>FUT<span class="zone">ZONE</span></h1>
+      <p class="lede">Oito jogos rápidos de futebol pra encaixar no seu dia: adivinhe, acerte palavras, agrupe, deduza, monte carreiras, corra contra o tempo e mais — <span class="hl">um novo desafio sempre que você voltar.</span></p>
+      <p class="sub">de graça · sem cadastro · joga no navegador</p>
+    </section>
+
+    <main class="games">
+      <a class="game craque" href="https://craquedodia.futzone.com.br">
+        <span class="mark">?</span>
+        <span class="inner">
+          <span class="kicker">o jogo de adivinhar</span>
+          <span class="gname">Craque do Dia</span>
+          <span class="gdesc">Um jogador misterioso por dia. Use as pistas — época, posição, clubes — e descubra em até 6 tentativas. Quanto menos, melhor.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game word" href="https://futword.futzone.com.br">
+        <span class="mark">▦</span>
+        <span class="inner">
+          <span class="kicker">o jogo de palavras</span>
+          <span class="gname">FutWord</span>
+          <span class="gdesc">Tipo Termo, com o vocabulário do futebol. Descubra a palavra do dia nas tentativas certas e avance pelos níveis.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game liga" href="https://ligadoscraques.futzone.com.br">
+        <span class="mark">⬛</span>
+        <span class="inner">
+          <span class="kicker">o jogo de agrupar</span>
+          <span class="gname">Liga dos Craques</span>
+          <span class="gdesc">16 craques, 4 grupos secretos. Agrupe por seleção, posição, época, clube ou conquista. Cuidado com as pegadinhas.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game impostor" href="https://oimpostor.futzone.com.br">
+        <span class="mark">?</span>
+        <span class="inner">
+          <span class="kicker">o jogo de deduzir</span>
+          <span class="gname">O Impostor</span>
+          <span class="gdesc">Um grupo de craques, um intruso escondido. Siga as pistas e desmascare quem não pertence — você só tem um palpite.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game carreira" href="https://carreira.futzone.com.br">
+        <span class="mark">↗</span>
+        <span class="inner">
+          <span class="kicker">o jogo de trajetória</span>
+          <span class="gname">Carreira</span>
+          <span class="gdesc">Descubra o craque pela sequência de clubes da carreira. Quanto menos clubes precisar ver, mais pontos.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game caca" href="https://cacaaoscraques.futzone.com.br">
+        <span class="mark">✓</span>
+        <span class="inner">
+          <span class="kicker">o jogo de memória</span>
+          <span class="gname">Caça aos Craques</span>
+          <span class="gdesc">Uma categoria, 16 craques. Marque todos que se encaixam — e só eles. Quantos você lembra?</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game anagrama" href="https://futgrama.futzone.com.br">
+        <span class="mark">◵</span>
+        <span class="inner">
+          <span class="kicker">o jogo de embaralhar</span>
+          <span class="gname">FUTgrama</span>
+          <span class="gdesc">As letras de um craque estão embaralhadas. Monte o nome certo na ordem — com o mínimo de dicas.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game sobrevivencia" href="https://sobrevivencia.futzone.com.br">
+        <span class="mark">⏱</span>
+        <span class="inner">
+          <span class="kicker">o jogo contra o tempo</span>
+          <span class="gname">Sobrevivência</span>
+          <span class="gdesc">Responda o máximo de perguntas antes do tempo e das vidas acabarem. A dificuldade só aumenta. Quão longe você chega?</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+    </main>
+
+    <div class="strip">
+      <span class="more">Mais jogos chegando ao <b>Futzone</b>. Volte sempre.</span>
+      <span class="more">⚽ feito por quem ama futebol</span>
+    </div>
+
+    <footer>
+      <p class="ft">futzone<span class="amber">.</span>com.br — © 2026</p>
+    </footer>
+  </div>
+</body>
+</html>
