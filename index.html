@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Futzone — jogos diários de futebol</title>
-<meta name="description" content="Futzone: quatro jogos rápidos de futebol pra jogar todo dia. Adivinhe o craque, teste seu vocabulário, agrupe os craques e ache o impostor.">
+<meta name="description" content="Futzone: sete jogos rápidos de futebol pra jogar todo dia. Adivinhe o craque, monte carreiras, ache o impostor, desembaralhe nomes e mais.">
 <meta property="og:title" content="Futzone — jogos diários de futebol">
-<meta property="og:description" content="Adivinhe o craque, teste seu vocabulário, agrupe os craques e ache o impostor. Quatro jogos rápidos, de graça, todo dia.">
+<meta property="og:description" content="Sete jogos rápidos de futebol, de graça, todo dia: adivinhe, agrupe, deduza, monte carreiras, teste a memória e desembaralhe nomes.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,6 +131,18 @@
   .game.impostor:hover{border-color:#ff5252;}
   .game.impostor:hover .play{background:#ff5252;}
   .game.impostor:focus-visible{outline-color:#ff5252;}
+  .game.carreira .gname{color:#4db8ff;}
+  .game.carreira:hover{border-color:#4db8ff;}
+  .game.carreira:hover .play{background:#4db8ff;}
+  .game.carreira:focus-visible{outline-color:#4db8ff;}
+  .game.caca .gname{color:#2ed47a;}
+  .game.caca:hover{border-color:#2ed47a;}
+  .game.caca:hover .play{background:#2ed47a;}
+  .game.caca:focus-visible{outline-color:#2ed47a;}
+  .game.anagrama .gname{color:#a98bff;}
+  .game.anagrama:hover{border-color:#a98bff;}
+  .game.anagrama:hover .play{background:#a98bff;}
+  .game.anagrama:focus-visible{outline-color:#a98bff;}
 
   /* ── footer strip ── */
   .strip{
@@ -168,7 +180,7 @@
         </span>
       </div>
       <h1>FUT<span class="zone">ZONE</span></h1>
-      <p class="lede">Quatro jogos rápidos de futebol pra encaixar no seu dia: adivinhe o craque, acerte as palavras, agrupe os craques e desmascare o impostor — <span class="hl">um desafio novo a cada 24 horas.</span></p>
+      <p class="lede">Sete jogos rápidos de futebol pra encaixar no seu dia: adivinhe, acerte palavras, agrupe, deduza, monte carreiras e mais — <span class="hl">um desafio novo a cada 24 horas.</span></p>
       <p class="sub">de graça · sem cadastro · joga no navegador</p>
     </section>
 
@@ -209,6 +221,36 @@
           <span class="kicker">o jogo de deduzir</span>
           <span class="gname">O Impostor</span>
           <span class="gdesc">Um grupo de craques, um intruso escondido. Siga as pistas e desmascare quem não pertence — você só tem um palpite.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game carreira" href="https://carreira.futzone.com.br">
+        <span class="mark">↗</span>
+        <span class="inner">
+          <span class="kicker">o jogo de trajetória</span>
+          <span class="gname">Carreira</span>
+          <span class="gdesc">Descubra o craque pela sequência de clubes da carreira. Quanto menos clubes precisar ver, mais pontos.</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game caca" href="https://cacaaoscraques.futzone.com.br">
+        <span class="mark">✓</span>
+        <span class="inner">
+          <span class="kicker">o jogo de memória</span>
+          <span class="gname">Caça aos Craques</span>
+          <span class="gdesc">Uma categoria, 16 craques. Marque todos que se encaixam — e só eles. Quantos você lembra?</span>
+          <span class="play">Jogar agora →</span>
+        </span>
+      </a>
+
+      <a class="game anagrama" href="https://futgrama.futzone.com.br">
+        <span class="mark">◵</span>
+        <span class="inner">
+          <span class="kicker">o jogo de embaralhar</span>
+          <span class="gname">FUTgrama</span>
+          <span class="gdesc">As letras de um craque estão embaralhadas. Monte o nome certo na ordem — com o mínimo de dicas.</span>
           <span class="play">Jogar agora →</span>
         </span>
       </a>
